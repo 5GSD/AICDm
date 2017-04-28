@@ -1,0 +1,154 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "zz.aimsicd.lite.rflog"      // "zz.aimsicd.rflog
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "0.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        jackOptions {
+            enabled true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            //applicationIdSuffix ".debug"
+            debuggable true                 // Default (debug): true
+            minifyEnabled false             // Default (debug): false
+            zipAlignEnabled false           // Default (debug): false
+        }
+        release {
+            //applicationIdSuffix ".release"
+            // NOTE: Google Play releases are not allowed to be debuggable!
+            debuggable false                // Enable D:* logcat items AND allow app to be debugged
+            minifyEnabled false             // Enables code shrinking for the release build type
+            shrinkResources false           // Only works with minifyEnabled
+            zipAlignEnabled true            // Enable memory/zip alignment of app...
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release
+        }
+        beta.initWith(buildTypes.release)   // Use "release" builds as a template for beta builds.
+        beta {
+            applicationIdSuffix ".beta"
+            debuggable true
+        }
+        // Rename APK output files with:
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def file = output.outputFile
+                def filename = file.name.replace("app", "rflog")  // Set default APK name prefix (app*.apk --> rflog*.apk)
+                output.outputFile = new File(file.parent, filename)
+
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+
+    lintOptions {
+        //--- lint (self) ---------------------------------------------------------------
+//        warning 'MissingTranslation', 'InvalidPackage', 'MissingRegistered'
+        abortOnError false              // true by default
+        htmlReport true                 // show gradle/lint errors in browser
+        textReport false                // show gradle/lint errors in console
+        xmlReport false                 //
+        textOutput 'stdout'
+        //checkAllWarnings false        //
+        //checkReleaseBuilds false      //
+        //ignoreWarnings true           // false by default
+        //quiet true                    // false by default
+
+        //disable 'deprecation'         // Does this exists (as shown in -Xlint gradle output)?
+        //disable 'unchecked'           // Does this exists (as shown in -Xlint gradle output)?
+
+        disable 'ApplySharedPref'       // We want our preference changes to be immediate
+//        disable 'AppCompatResource'   // Menu namespace: appcompat library resources should refer "showAsAction" in the app:namespace
+        disable 'MissingTranslation'    // Strings declared in one language should also be translated in all other languages
+        //disable 'ExtraTranslation'    // Make sure all labelled strings appear in all locales
+//        disable 'ValidFragment'       //
+//        disable 'CommitPrefEdits'     // ToDo: Consider using apply() instead;
+        //disable 'SdCardPath'          // Use non-specific API independent external sdcard paths
+        disable 'Typos'                 //
+        disable 'HardwareIds'           // Using getSubscriberId to get device identifiers (IMSI) is not recommended
+//        disable 'SetJavaScriptEnabled'  // Used in:
+//        disable 'Wakelock'            // lint wakelock check is buggy, we're probably doing it right.
+//        disable 'Overdraw'            // @color/common_sectionBackground
+        //disable 'UnusedAttribute'     // New attributes in AndroidManifest, not supported in lower API's
+//        disable 'UnusedResources'     // Many unused strings and images: <placeholders?>
+        //disable 'UselessParent'       //
+        //disable 'TooManyViews'        //
+        //disable 'EasterEgg'           // ...is code deliberately hidden in the code. Where?
+
+        disable 'GoogleAppIndexingWarning'      // Ignore Googles Firebase App Indexing ?
+        //disable 'AppLinksAutoVerifyError'     // where?
+        //disable 'AppLinksAutoVerifyWarning'   // where?
+        //disable 'ClickableViewAccessibility'  // lint require View#performClick:
+
+        //--- UI: Icons & Images --------------------------------------------------------
+        disable 'IconColors'                // Ugly Material design only allow Gray/White icons..we ignore.
+//        disable 'IconDipSize'             // ToDo: Fix icons
+//        disable 'IconDuplicatesConfig'    // ToDo: maybe nothing
+//        disable 'IconDensities'           // ToDo: Fix icons
+        //disable 'IconExpectedSize'        // Use predefined sizes (for each density) for launcher icons
+//        disable 'IconLocation'            // ToDo: Fix icons: "Found bitmap drawable in densityless folder..."
+        disable 'ContentDescription'        // Images without contentDescription
+
+        //--- UI: Text & Typography -----------------------------------------------------
+        disable 'TypographyEllipsis'            //
+        disable 'SmallSp'                       // "Avoid using sizes smaller than 12sp: 10sp"
+//        disable 'SetTextI18n'                 // We don't translate button strings
+        disable 'HardcodedText'                 // We don't care about hardcoded text for numbers...
+
+        //--- UI: RTL -------------------------------------------------------------------
+        // NOTE: [1] If your minSdkVersion is less than 17, you should add BOTH the older
+        //           left/right attributes as well as the new start/right attributes.
+        //       [2] To enable RTL support, when running on API 17 and higher, you must
+        //           set the android:supportsRtl attribute in the Android manifest
+        //-------------------------------------------------------------------------------
+//        disable 'RtlSymmetry'                 // ToDo: Do we need to check all "Padding and margin symmetry"?
+//        disable 'RtlHardcoded'                // We (currently) don't care about RTL layouts (L/R vs Start/End)
+        //disable 'RtlEnabled'                  // See [2].
+
+        //--- UI: Buttons ---------------------------------------------------------------
+        // https://material.google.com/components/buttons.html
+        // http://stackoverflow.com/a/25610531/1147688
+        //-------------------------------------------------------------------------------
+//        disable 'BackButton'                              // Should we have a more clearly defined "back" button?
+        disable 'ButtonStyle'                               // We don't want ugly borderless buttons: "Button should be borderless"
+
+//        disable 'TrulyRandom'                             // If this lint only appears in Utils.java then it's ok
+        //disable 'NewApi'                                  // If there are new API calls used on older minSdkVersion
+//        disable 'LabelFor'                                // API 17+ : Text fields should be labelled with a "labelFor" attribute
+//        disable 'SSLCertificateSocketFactoryCreateSocket' //
+        //disable ''                                        //
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
+}
+

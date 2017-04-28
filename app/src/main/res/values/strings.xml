@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">RFlog</string>
+    <string name="permissions_denial">In order to use this app, you must accept all permissions.</string>
+
+    <!-- For PHS ... -->
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_phone_status">Phone Status</string>
+    <string name="title_activity_phone">Cellphone Data</string>
+    <string name="tvPhoneStatus">Phone Status</string>
+
+    <string name="tvServiceState">Service State : </string>
+    <string name="tvCellLocation">Cell Location : </string>
+    <string name="tvCallState">Call State : </string>
+    <string name="tvConnState">Connection State : </string>
+    <string name="tvSignalLevel">Signal Level : </string>
+    <string name="strData">Data : </string>
+
+</resources>

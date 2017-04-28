@@ -1,0 +1,92 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base application theme. -->
+    <style
+        name="AppTheme"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+            <!-- Customize your theme here. -->
+            <item name="colorPrimary">@color/colorPrimary</item>
+            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+            <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Phone Status -->
+    <!-- style name="AppTheme" parent="android:Theme.Light" / -->
+
+    <color name="blue">#0000FF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFF200</color>
+    <color name="green">#00FF00</color>
+    <color name="black">#000000</color>
+
+    <style name="labelStyleRight">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:gravity">center_vertical|right</item>
+    </style>
+    <style name="labelStyleLeft">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+    <style name="textStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+    <style name="textStyleCenter">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="textSmallStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+    <style name="progressStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+        <item name="android:progress">15</item>
+        <item name="android:max">100</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:progressDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+    </style>
+    <style name="imageStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.5</item>
+        <!-- item name="android:src">@drawable/nodata</item -->
+        <item name="android:scaleType">fitStart</item>
+        <item name="android:layout_margin">10sp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+
+</resources>
+
