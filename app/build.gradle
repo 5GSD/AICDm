@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         applicationId "zz.aimsicd.lite.rflog"      // "zz.aimsicd.rflog
@@ -85,7 +85,7 @@ android {
         disable 'MissingTranslation'    // Strings declared in one language should also be translated in all other languages
         //disable 'ExtraTranslation'    // Make sure all labelled strings appear in all locales
 //        disable 'ValidFragment'       //
-//        disable 'CommitPrefEdits'     // ToDo: Consider using apply() instead;
+//        disable 'CommitPrefEdits'     // We want immediate changes, so not using apply()
         //disable 'SdCardPath'          // Use non-specific API independent external sdcard paths
         disable 'Typos'                 //
         disable 'HardwareIds'           // Using getSubscriberId to get device identifiers (IMSI) is not recommended
