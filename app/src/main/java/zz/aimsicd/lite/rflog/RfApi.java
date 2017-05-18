@@ -79,10 +79,10 @@ import java.util.List;
     =========================================================================================
 */
 
-public class PhoneCallback extends PhoneStateListener {
+public class RfApi extends PhoneStateListener {
 
     private static final String TAG = "AIMSICD";
-    private static final String mTAG = "logRF";
+    private static final String mTAG = "RfApi";
 
     // Attributes
     private final TextView mTextView;
@@ -90,7 +90,7 @@ public class PhoneCallback extends PhoneStateListener {
     private Context context;
 
     // Constructor
-    public PhoneCallback(TextView textView) {
+    public RfApi(TextView textView) {
         mTextView = textView;
     }
 
@@ -252,7 +252,9 @@ public class PhoneCallback extends PhoneStateListener {
     public void onDataActivity(int direction) {
         super.onDataActivity(direction);
         String DA = getDataActivity(direction);
-        Log.i(TAG, "DA: " + DA);
+        //if (!DA.equals("unknown")) {
+            Log.i(TAG, "DA: " + DA);
+        //}
     }
 
     @Override
@@ -348,6 +350,8 @@ public class PhoneCallback extends PhoneStateListener {
     //  More... ???
     //===================================================================================
 
+    // ToDo: probably remove, as this was just copy/paste from a different code
+    //       and only serve as a reference...
     public String getCellularInfo(TelephonyManager telephonyManager) {
         Log.v(TAG, "inside getCellularInfo");
         String cellularInfo = "";

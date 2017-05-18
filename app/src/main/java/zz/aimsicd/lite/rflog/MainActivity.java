@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         displayTelephonyInfo(); // only shown once...
         startRFListener();
-}
+    }
 
     //onStart() ???
 
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, mTAG + "startRFListener: <<------- START ------- >>");
         TextView textView = (TextView)findViewById(R.id.id_text_view);
         mTM = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        mTM.listen(new PhoneCallback(textView),
+        mTM.listen(new RfApi(textView),
               PhoneStateListener.LISTEN_CALL_STATE                  // idle, offhook, ringing
             | PhoneStateListener.LISTEN_CELL_INFO                   //      [API 17]
             | PhoneStateListener.LISTEN_CELL_LOCATION               //      [Use location manager instead!]
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         //TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         //tm.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
         mTM = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        mTM.listen(new PhoneCallback(textView), PhoneStateListener.LISTEN_NONE);
+        mTM.listen(new RfApi(textView), PhoneStateListener.LISTEN_NONE);
     }
 
     //===================================================================================
