@@ -32,51 +32,52 @@ import java.util.List;
 
 
 /*
-    =========================================================================================
+     ===================================================================================
+
      LISTEN_CALL_FORWARDING_INDICATOR   : Listen for changes to the call-forwarding indicator.
      LISTEN_CALL_STATE                  : Listen for changes to the device call state.
 
-        CALL_STATE_IDLE                    Device call state: No activity.
-        CALL_STATE_OFFHOOK                 Device call state: Off-hook. At least one call exists that is dialing, active, or on hold,
-                                           and no calls are ringing or waiting.
-        CALL_STATE_RINGING                 Device call state: Ringing. A new call arrived and is ringing or waiting. In the latter case,
-                                           another call is already active.
+        CALL_STATE_IDLE                 Device call state: No activity.
+        CALL_STATE_OFFHOOK              Device call state: Off-hook. At least one call exists that is dialing, active, or on hold,
+                                        and no calls are ringing or waiting.
+        CALL_STATE_RINGING              Device call state: Ringing. A new call arrived and is ringing or waiting. In the latter case,
+                                        another call is already active.
 
      LISTEN_CELL_INFO                   : Listen for changes to observed cell info.
      LISTEN_CELL_LOCATION               : Listen for changes to the device's cell location.
      LISTEN_DATA_ACTIVITY               : Listen for changes to the direction of data traffic on the data connection (cellular).
 
-        DATA_ACTIVITY_DORMANT              Data connection is active, but physical link is down
-        DATA_ACTIVITY_IN                   Data connection activity: Currently receiving IP PPP traffic.
-        DATA_ACTIVITY_INOUT                Data connection activity: Currently both sending and receiving IP PPP traffic.
-        DATA_ACTIVITY_NONE                 Data connection activity: No traffic.
-        DATA_ACTIVITY_OUT                  Data connection activity: Currently sending IP PPP traffic.
+        DATA_ACTIVITY_DORMANT           Data connection is active, but physical link is down
+        DATA_ACTIVITY_IN                Data connection activity: Currently receiving IP PPP traffic.
+        DATA_ACTIVITY_INOUT             Data connection activity: Currently both sending and receiving IP PPP traffic.
+        DATA_ACTIVITY_NONE              Data connection activity: No traffic.
+        DATA_ACTIVITY_OUT               Data connection activity: Currently sending IP PPP traffic.
 
      LISTEN_DATA_CONNECTION_STATE       : Listen for changes to the data connection state (cellular).
 
-        DATA_CONNECTED                     Data connection state: Connected. IP traffic should be available.
-        DATA_CONNECTING                    Data connection state: Currently setting up a data connection.
-        DATA_DISCONNECTED                  Data connection state: Disconnected. IP traffic not available.
-        DATA_SUSPENDED                     Data connection state: Suspended. The connection is up, but IP traffic is temporarily unavailable.
-                                           For example, in a 2G network, data activity may be suspended when a voice call arrives.
+        DATA_CONNECTED                  Data connection state: Connected. IP traffic should be available.
+        DATA_CONNECTING                 Data connection state: Currently setting up a data connection.
+        DATA_DISCONNECTED               Data connection state: Disconnected. IP traffic not available.
+        DATA_SUSPENDED                  Data connection state: Suspended. The connection is up, but IP traffic is temporarily unavailable.
+                                        For example, in a 2G network, data activity may be suspended when a voice call arrives.
 
      LISTEN_SERVICE_STATE               : Listen for changes to the network service state (cellular).
 
-        STATE_EMERGENCY_ONLY               The phone is registered and locked. Only emergency numbers are allowed.
-        STATE_IN_SERVICE                   Normal operation condition, the phone is registered with an operator either in home network or in roaming.
-        STATE_OUT_OF_SERVICE               Phone is not registered with any operator, the phone can be currently searching a new operator to
-                                           register to, or not searching to registration at all, or registration is denied, or radio signal
-                                           is not available.
-        STATE_POWER_OFF                    Radio of telephony is explicitly powered off.
+        STATE_EMERGENCY_ONLY            The phone is registered and locked. Only emergency numbers are allowed.
+        STATE_IN_SERVICE                Normal operation condition, the phone is registered with an operator either in home network or in roaming.
+        STATE_OUT_OF_SERVICE            Phone is not registered with any operator, the phone can be currently searching a new operator to
+                                        register to, or not searching to registration at all, or registration is denied, or radio signal
+                                        is not available.
+        STATE_POWER_OFF                 Radio of telephony is explicitly powered off.
 
-     Also provide:
-     * Roaming indicator
-     * Operator name, short name and numeric id
-     * Network selection mode
+        Also provide:
+         * Roaming indicator
+         * Operator name, short name and numeric id
+         * Network selection mode
 
      LISTEN_SIGNAL_STRENGTHS            : Listen for changes to the network signal strengths (cellular).
      LISTEN_MESSAGE_WAITING_INDICATOR   : Listen for changes to the message-waiting indicator.
-    =========================================================================================
+     ===================================================================================
 */
 
 public class RfApi extends PhoneStateListener {

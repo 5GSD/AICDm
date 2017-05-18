@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     //===================================================================================
     //  Activity Life Cycle
     //===================================================================================
+    // Because of the way lifecycle events are propagated, not all of them are necessary.
+    // See: https://i.stack.imgur.com/LXnx7.png
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,32 +61,47 @@ public class MainActivity extends AppCompatActivity {
         //setContentView(R.layout.phonestatus);
         checkPermissions();
         displayTelephonyInfo(); // only shown once...
-        startRFListener();
+        //startRFListener();
     }
 
-    //onStart() ???
-
+    // not necessary
     @Override
-    protected void onStop() {
-        super.onStop();
-        //Stop listening to the telephony events
-        stopRFListener();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //Stop listening to the telephony events
-        stopRFListener();
+    protected void onStart() {  // <-- also via onRestart() when activity come into foreground
+        super.onStart();
+        Log.i(TAG, mTAG + "onStart event: do nothing");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, mTAG + "onResume event: startRFListener");
         //subscribes to the telephony related events
         startRFListener();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, mTAG + "onPause event: stopRFListener since we have no UI");
+        //Stop listening to the telephony events
+        stopRFListener();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, mTAG + "onStop event: stopRFListener");
+        //Stop listening to the telephony events
+        stopRFListener();
+    }
+
+    // not necessary
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, mTAG + "onDestroy: ------->> STOP");
+    }
+
 
     // Sets the textview contents
     private void setTextViewText(int id,String text) {
@@ -245,6 +262,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, mTAG + deviceinfo);
         Log.i(TAG, mTAG + "displayTelephonyInfo: <<------- END --------- >>");
     }
+
+    // Fixme:  We can probably remove this, as TelephonyManager.java already has calls to do this:
+    // Fixme:  getNetworkType, getNetworkClass, getNetworkTypeName
 
     // NETWORK_TYPE_XXX
     private String getNetworkTypeString(int type){
