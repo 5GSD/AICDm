@@ -1,56 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/id_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:padding="10dp"
         android:textColor="#000000" />
-</LinearLayout>
 
-<!-- TabHost
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@android:id/tabhost">
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Example of services"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tutorials point "
+        android:textColor="#ff87ff09"
+        android:textSize="30dp"
+        android:layout_above="@+id/imageButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp" /-->
 
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-        </TabWidget>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:src="@mipmap/abc"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:text="Start Services"
+        android:onClick="startService"
+        android:layout_below="@+id/imageButton"
+        android:layout_centerHorizontal="true" />
 
-    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Services"
+        android:id="@+id/button"
+        android:onClick="stopService"
+        android:layout_below="@+id/button2"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:layout_alignRight="@+id/button2"
+        android:layout_alignEnd="@+id/button2" />
 
-</TabHost>
+</RelativeLayout>
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/id_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="#000000" />
-    </LinearLayout -->

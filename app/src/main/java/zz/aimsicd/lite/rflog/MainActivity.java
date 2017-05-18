@@ -1,6 +1,7 @@
 package zz.aimsicd.lite.rflog;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -45,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Attributes
     private TelephonyManager mTM;
+
+    // Sets the textview contents
+    private void setTextViewText(int id,String text) {
+        ((TextView)findViewById(id)).setText(text);
+    }
+
 
     //===================================================================================
     //  Activity Life Cycle
@@ -102,10 +110,22 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, mTAG + "onDestroy: ------->> STOP");
     }
 
+    //===================================================================================
+    //  Service Life-cycle:
+    //===================================================================================
+    // https://developer.android.com/reference/android/app/Service.html#ServiceLifecycle
+    // https://developer.android.com/images/service_lifecycle.png
+    // We follow:  https://www.tutorialspoint.com/android/android_services.htm
 
-    // Sets the textview contents
-    private void setTextViewText(int id,String text) {
-        ((TextView)findViewById(id)).setText(text);
+    public void startService(View view) {
+        Log.i(TAG, mTAG + "startService: RfApiSvc");
+        startService(new Intent(getBaseContext(), RfApiSvc.class));
+    }
+
+    // Method to stop the service
+    public void stopService(View view) {
+        Log.i(TAG, mTAG + "stopService: RfApiSvc");
+        stopService(new Intent(getBaseContext(), RfApiSvc.class));
     }
 
 

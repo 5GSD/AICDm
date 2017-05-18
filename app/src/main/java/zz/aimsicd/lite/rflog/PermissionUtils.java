@@ -9,7 +9,6 @@ import android.os.Build;
 
 import android.support.v7.app.AlertDialog;
 
-
 public class PermissionUtils {
 
     //--------------------------------------------------
