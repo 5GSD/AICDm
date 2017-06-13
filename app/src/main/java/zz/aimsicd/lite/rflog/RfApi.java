@@ -286,7 +286,7 @@ public class RfApi extends PhoneStateListener {
         //message += "SS: Roaming: "          + serviceState.getRoaming() + "\n";
         //message += "SS: " + getServiceState(serviceState.getState());
         Log.i(TAG, "SS: " + SS);
-        mTextView.setText(SS);
+        //mTextView.setText(SS);
     }
 
     @Override
@@ -295,7 +295,7 @@ public class RfApi extends PhoneStateListener {
         String CS = getCallState(state);
         //String message = "CallState: " + getCallState(state); //  + "incomingNumber: " + incomingNumber;
         Log.i(TAG, "CS: " + CS);
-        mTextView.setText(CS);
+        //mTextView.setText(CS);
     }
 
     @Override
@@ -304,7 +304,7 @@ public class RfApi extends PhoneStateListener {
         String DC = getConnectionState(state);
         //String message = "DataConnectionState: " + getConnectionState(state);
         Log.i(TAG, "DC: " + DC);
-        mTextView.setText(DC);
+        //mTextView.setText(DC);
     }
 
     @Override
