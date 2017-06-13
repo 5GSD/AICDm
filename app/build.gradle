@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 25                            // 26
+    buildToolsVersion "26.0.0"                      // 26.0.0
 
     defaultConfig {
-        applicationId "zz.aimsicd.lite.rflog"      // "zz.aimsicd.rflog
-        minSdkVersion 21
-        targetSdkVersion 25
+        applicationId "zz.aimsicd.lite.rflog"       // "zz.aimsicd.rflog
+        minSdkVersion 21                            // 21 (we test 19 for AVD armv7)
+        targetSdkVersion 25                         // 26
         versionCode 1
         versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -125,7 +125,7 @@ android {
         //           set the android:supportsRtl attribute in the Android manifest
         //-------------------------------------------------------------------------------
 //        disable 'RtlSymmetry'                 // ToDo: Do we need to check all "Padding and margin symmetry"?
-//        disable 'RtlHardcoded'                // We (currently) don't care about RTL layouts (L/R vs Start/End)
+        disable 'RtlHardcoded'                // We (currently) don't care about RTL layouts (L/R vs Start/End)
         //disable 'RtlEnabled'                  // See [2].
 
         //--- UI: Buttons ---------------------------------------------------------------
@@ -148,7 +148,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.0+'      // Last:    25.4.0  / 26.0.0+
     testCompile 'junit:junit:4.12'
 }
 
