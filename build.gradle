@@ -4,11 +4,20 @@ buildscript {
     repositories {
         jcenter()
     }
+
+    // ToDo:  This doesn't work when using CheckStyle-IDEA plugin. Consider removing.
+    /*configurations {
+        classpath {
+            exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        }
+    }*/
+
     dependencies {
+        // see: https://jcenter.bintray.com/com/android/tools/build/gradle/
         classpath 'com.android.tools.build:gradle:2.3.3'
 
         // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        //       in the individual module build.gradle files
     }
 }
 

@@ -37,12 +37,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST = 100;
 
     private static final String[] PERMISSIONS = {
-        Manifest.permission.READ_PHONE_STATE,           // PHONE
-        Manifest.permission.ACCESS_COARSE_LOCATION,     // LOCATION
-        Manifest.permission.ACCESS_FINE_LOCATION,       // LOCATION
-        Manifest.permission.ACCESS_NETWORK_STATE,       //
-        Manifest.permission.READ_SMS,                   // SMS
-        Manifest.permission.WRITE_EXTERNAL_STORAGE      // STORAGE
+            Manifest.permission.ACCESS_COARSE_LOCATION,     // LOCATION
+            //Manifest.permission.ACCESS_COARSE_UPDATES,      //
+            Manifest.permission.ACCESS_FINE_LOCATION,       // LOCATION
+            Manifest.permission.ACCESS_NETWORK_STATE,       //
+            Manifest.permission.CHANGE_NETWORK_STATE,       //
+            Manifest.permission.READ_PHONE_STATE,           // PHONE
+            Manifest.permission.MODIFY_PHONE_STATE,         // System Level Permission! Needed for:  setCellInfoListRate
+            //Manifest.permission.READ_CELL_BROADCASTS,       //
+            Manifest.permission.READ_SMS,                   // SMS
+            //Manifest.permission.READ_SMS,                   //
+            //Manifest.permission.READ_SMS,                   //
+            Manifest.permission.WRITE_EXTERNAL_STORAGE      // STORAGE
     };
 
     // Attributes
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //setContentView(R.layout.phonestatus);
         checkPermissions();
-        displayTelephonyInfo(); // only shown once...
+        //displayTelephonyInfo(); // only show once
         //startRFListener();
     }
 
@@ -76,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {  // <-- also via onRestart() when activity come into foreground
         super.onStart();
-        Log.i(TAG, mTAG + "onStart event: do nothing");
+        Log.i(TAG, mTAG + "onStart event: displayTelephonyInfo()");
+        displayTelephonyInfo(); // only show once
     }
 
     @Override
@@ -147,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         if (grantResults.length > 0) {
             Boolean permissionGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
             if (permissionGranted) {
-                startRFListener();
+                //startRFListener();
             } else {
                 PermissionUtils.alertAndFinish(this);
             }
@@ -158,19 +165,30 @@ public class MainActivity extends AppCompatActivity {
         // Implement the new AOS permission system for API >= 23 (M)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.i(TAG, mTAG + "Permission check: Yes, we are using API > 22(L)...");
-            Boolean canWriteExternalStorage = PermissionUtils.canReadPhoneState(this);
-            Boolean canReadExternalStorage = PermissionUtils.canAccessCoarseLocation(this);
-            if (!canWriteExternalStorage || !canReadExternalStorage) {
+
+            //Boolean canWriteExternalStorage = PermissionUtils.canReadPhoneState(this);
+            //Boolean canReadExternalStorage = PermissionUtils.canAccessCoarseLocation(this);
+
+            /*Boolean readExtSD   = PermissionUtils.canReadExternalStorage(this);
+            Boolean writeExtSD  = PermissionUtils.canWriteExternalStorage(this);
+            Boolean accCoarse   = PermissionUtils.canAccessCoarseLocation(this);
+            Boolean accPhone    = PermissionUtils.canReadPhoneState(this);
+            Boolean accNetw     = PermissionUtils.canAccessNetworkState(this);
+
+            if (!readExtSD || !writeExtSD || !accCoarse || !accPhone || !accNetw ) {*/
+            try {
                 requestPermissions(PERMISSIONS, PERMISSION_REQUEST);
-            } else {
-                // Permission was granted.
                 Log.i(TAG, mTAG + "Permission granted!");
-                startRFListener();
+            } catch (Exception ee) {
+                //} else {
+                // Permission was granted.
+                Log.e(TAG, mTAG + "Permission not granted! :" + ee);
+                //startRFListener();
             }
         } else {
             // API < 23 doesn't use these permissions
-            Log.i(TAG, mTAG + "Permission check: No, we are using API < 23(M)");
-            startRFListener();
+            Log.i(TAG, mTAG + "Permission check: Not needed, we are using API < 23(M)");
+            //startRFListener();
         }
     }
 
@@ -234,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     //private void callPhoneManager() {
     private void startRFListener() {
         Log.i(TAG, mTAG + "startRFListener: <<------- START ------- >>");
-        TextView textView = (TextView)findViewById(R.id.id_text_view);
+        TextView textView = (TextView)findViewById(R.id.textView0);
         mTM = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         mTM.listen(new RfApi(textView),
               PhoneStateListener.LISTEN_CALL_STATE                  // idle, offhook, ringing
@@ -246,13 +264,14 @@ public class MainActivity extends AppCompatActivity {
             | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS            //
             | PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR   //      CFI
             | PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR   //      MWI
+            //| PhoneStateListener.LISTEN_VOLTE_STATE   //      MWI
         );
         Log.i(TAG, mTAG + "startRFListener: <<------- END --------- >>");
     }
 
     // De-register the telephony events
     private void stopRFListener() {
-        TextView textView = (TextView)findViewById(R.id.id_text_view);              // new
+        TextView textView = (TextView)findViewById(R.id.textView0);              // new
         //TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         //tm.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
         mTM = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -272,11 +291,11 @@ public class MainActivity extends AppCompatActivity {
         // ToDo: maybe not here!?
         GsmCellLocation gsmLoc = (GsmCellLocation) mTM.getCellLocation();    // require:  ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION
         String networktype = getNetworkTypeString(mTM.getNetworkType());     // NETWORK_TYPE_XXX (RAT)
-        //String phonetype = getPhoneTypeString(mTM.getPhoneType());           // PHONE_TYPE:  [GSM, CDMA, SIP, NONE]
+        String phonetype = getPhoneTypeString(mTM.getPhoneType());           // PHONE_TYPE:  [GSM, CDMA, SIP, NONE]
 
         String deviceinfo = "";
         deviceinfo += ("RAT: " + networktype + "\n");
-        //deviceinfo += ("PHONE_TYPE: " + phonetype + "\n");
+        deviceinfo += ("PHONE_TYPE: " + phonetype + "\n");
         //setTextViewText(info_ids[INFO_DEVICE_INFO_INDEX],deviceinfo);
 
         Log.i(TAG, mTAG + deviceinfo);

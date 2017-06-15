@@ -44,4 +44,21 @@ public class PermissionUtils {
     public static Boolean canReadPhoneState(Activity activity) {
         return (PermissionUtils.hasPermission(activity, Manifest.permission.READ_PHONE_STATE));
     }
+
+    public static Boolean canAccessNetworkState(Activity activity) {
+        return (PermissionUtils.hasPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE));
+    }
+
+    /*public static Boolean canReadCellBroadcasts(Activity activity) {
+        return (PermissionUtils.hasPermission(activity, Manifest.permission.READ_CELL_BROADCASTS));
+    }*/
+
+    public static Boolean canReadExternalStorage(Activity activity) {
+        return (PermissionUtils.hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE));
+    }
+
+    public static Boolean canWriteExternalStorage(Activity activity) {
+        return (PermissionUtils.hasPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE));
+    }
+
 }

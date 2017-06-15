@@ -49,7 +49,7 @@
     <!-- Special (Signature Level) Permissions (that may or may not be allowed) -->
     <!-- This one is needed to change: setCellInfoListRate -->
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
-        
+
     <!-- HARDWARE:  None of these tags are required to run app, but recommended... -->
     <uses-feature android:name="android.hardware.location"          android:required="true"/>
     <uses-feature android:name="android.hardware.location.gps"      android:required="true"/>

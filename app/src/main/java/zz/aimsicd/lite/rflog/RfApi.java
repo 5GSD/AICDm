@@ -1,8 +1,7 @@
 package zz.aimsicd.lite.rflog;
 
-import android.os.Build;
-
 import android.content.Context;
+import android.os.Build;
 
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
@@ -21,6 +20,7 @@ import android.telephony.CellSignalStrengthWcdma;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -150,78 +150,12 @@ public class RfApi extends PhoneStateListener {
 
 
     //==========================================
-    // TODO: WTF!?
+    // TODO:
     //==========================================
 
     // LISTEN_CELL_INFO
     // DB:  []
-    private String getCellInfo(List<CellInfo> cellInfo) {
-        //switch (cellInfo) {
-        //    case TelephonyManager.DATA_ACTIVITY_NONE:       return "No";    // No traffic.
-        //    default: return "unknown"; // "Un" ?
-        //}
-
-        // LTE
-        int mcc = -1, mnc = -1, tac = -1,  ci = -1, pci = -1, ecn = -1;     // getCellIdentity()
-        int ta = -1, lev = -1, srp = -1, srq = -1, snr = -1, cqi = -1;      // getCellSignalStrength()
-        // UMTS
-        int cid = -1, lac = -1, psc = -1, ucn = -1;
-
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        if(tm.getAllCellInfo() != null && !tm.getAllCellInfo().isEmpty()) {
-            CellInfo info = tm.getAllCellInfo().get(0); // Todo: What's in get(0) exactly?
-
-            if (info instanceof CellInfoLte) {
-                CellIdentityLte         dci = ((CellInfoLte) info).getCellIdentity();
-
-                // All these get: Integer.MAX_VALUE if unknown
-                mcc = dci.getMcc();                 // Mobile Country Code:                 [0..999]
-                mnc = dci.getMnc();                 // Mobile Network Code:                 [0..999]
-                tac = dci.getTac();                 // 16-bit Tracking Area Code:           [?..]
-                ci = dci.getCi();                   // 28-bit Cell Identity:                [?..0xffffff]
-                pci = dci.getPci();                 // Physical Cell Id:                    [0..503]
-                //ecn = dci.getEarfcn();            // 18-bit Absolute RF Channel Number:   [?..65535]?      !! API 24
-
-                Log.i(TAG, "LTE info 1/3: " + "MCC:" + mcc + ", MNC:" + mnc + ", TAC:" + tac + ", CI:" + ci + ", PCI:" + pci);
-
-            } else if (info instanceof CellInfoWcdma) {
-                CellIdentityWcdma         dci = ((CellInfoWcdma) info).getCellIdentity();
-
-                mcc = dci.getMcc();
-                mnc = dci.getMnc();
-                cid = dci.getCid();                 // 28-bit UMTS Cell Identity                [0..268435455] / [0..0xffffff]?
-                lac = dci.getLac();                 // 16-bit Location Area Code:               [0..65535]
-                psc = dci.getPsc();                 // 9-bit UMTS Primary Scrambling Code:      [0..511]
-                //ucn = dci.getUarfcn();            // 16-bit UMTS Absolute RF Channel Number:  [?..65535?]?      !! API 24
-
-                Log.i(TAG, "UMTS info 1/2: " + "MCC:" + mcc + ", MNC:" + mnc + ", LAC:" + lac + ", CID:" + cid + ", PSC:" + psc);
-
-            } else if (info instanceof CellInfoGsm) {
-                CellIdentityGsm dci = ((CellInfoGsm) info).getCellIdentity();
-
-                // CellIdentity
-                mcc = dci.getMcc();
-                mnc = dci.getMnc();
-                cid = dci.getCid();                 // 28-bit Cell Identity:                    [?..0xffffff]
-                lac = dci.getLac();                 // 16-bit Location Area Code:               [0..65535]
-                //bss = dci.getBsic();              // 6-bit Base Station Identity Code:        [0..63]          !! API 24
-                //acn = dci.getArfcn();             // 18-bit Absolute RF Channel Number:       [?..65535]?      !! API 24
-
-                Log.i(TAG, "GSM info 1/2: " + "MCC:" + mcc + ", MNC:" + mnc + ", LAC:" + lac + ", CID:" + cid);
-            }
-
-        } else {
-            Log.w(TAG, mTAG + "getAllCellInfo() returned NULL or an empty list!");
-            return "fail";
-        }
-
-        // also add a timestamp:
-        //data.putLong(TIMESTAMP, System.currentTimeMillis());
-        return "ok";
-    }
-
-
+    // todo
 
     // LISTEN_CELL_LOCATION
     // LISTEN_SIGNAL_STRENGTHS
@@ -235,58 +169,26 @@ public class RfApi extends PhoneStateListener {
     /*
         AOS API Available Listeners:
 
-        [-]      onCallForwardingIndicatorChanged(boolean cfi)
+        [x]      onCallForwardingIndicatorChanged(boolean cfi)
         [x]      onCallStateChanged(int state, String incomingNumber)
-        [?]      onCellInfoChanged(List<CellInfo> cellInfo)
+        [!]      onCellInfoChanged(List<CellInfo> cellInfo)
         [-]      onCellLocationChanged(CellLocation location)
         [x]      onDataActivity(int direction)
         [x]      onDataConnectionStateChanged(int state, int networkType), (int state)
-        [-]      onMessageWaitingIndicatorChanged(boolean mwi)
+        [x]      onMessageWaitingIndicatorChanged(boolean mwi)
         [x]      onServiceStateChanged(ServiceState serviceState)
         [ ]      onSignalStrengthsChanged(SignalStrength signalStrength)
+        [?]      onVoLteServiceStateChanged(VoLteServiceState stateInfo)
+    }
 
         WHERE:
-        [x] = implemented, ToDo: [-] = Need work, [?] = problem
+        [x] = implemented, [?] = should we implement? ToDo: [-] = Need work, [!] = problem
     */
 
     @Override
-    public void onDataActivity(int direction) {
-        super.onDataActivity(direction);
-        String DA = getDataActivity(direction);
-        //if (!DA.equals("unknown")) {
-            Log.i(TAG, "DA: " + DA);
-        //}
-    }
-
-    @Override
-    public void onCellInfoChanged(List<CellInfo> cellInfo) {
-        super.onCellInfoChanged(cellInfo);
-        Log.i(TAG, "CI 0/3: cellInfo: This ain\'t working yet!");
-        //Log.i(TAG, "CI 0/3: cellInfo: " + cellInfo);
-
-        //String CI = getCellInfo(cellInfo);
-        //Log.i(TAG, "CI 1/3: " + CI);
-
-        //String CI = getCellularInfo(mTM);
-        //Log.i(TAG, "CI 2/3: " + CI);
-        //String CI = gatherRadioData();
-        //Log.i(TAG, "CI 3/3: " + CI);
-    }
-
-    @Override
-    public void onServiceStateChanged(ServiceState serviceState) {
-        super.onServiceStateChanged(serviceState);
-        String SS = getServiceState(serviceState.getState());
-        //String message ="";
-        //message += "SS: ==> " + serviceState + "\n";
-        //message += "onServiceStateChanged: getOperatorAlphaLong "   + serviceState.getOperatorAlphaLong() + "\n";
-        //message += "onServiceStateChanged: getOperatorAlphaShort "  + serviceState.getOperatorAlphaShort() + "\n";
-        //message += "onServiceStateChanged: getOperatorNumeric "     + serviceState.getOperatorNumeric() + "\n";
-        //message += "SS: ManualSelection: "  + serviceState.getIsManualSelection() + "\n";
-        //message += "SS: Roaming: "          + serviceState.getRoaming() + "\n";
-        //message += "SS: " + getServiceState(serviceState.getState());
-        Log.i(TAG, "SS: " + SS);
-        //mTextView.setText(SS);
+    public void onCallForwardingIndicatorChanged(boolean cfi) {
+        super.onCallForwardingIndicatorChanged(cfi);
+        Log.i(TAG, "CFI: " + cfi);
     }
 
     @Override
@@ -299,18 +201,21 @@ public class RfApi extends PhoneStateListener {
     }
 
     @Override
-    public void onDataConnectionStateChanged(int state) {
-        super.onDataConnectionStateChanged(state);
-        String DC = getConnectionState(state);
-        //String message = "DataConnectionState: " + getConnectionState(state);
-        Log.i(TAG, "DC: " + DC);
-        //mTextView.setText(DC);
+    public void onCellInfoChanged(List<CellInfo> cellInfo) {
+        super.onCellInfoChanged(cellInfo);
+        Log.i(TAG, "CI 0/3: cellInfo: This ain\'t working yet!");
+        //Log.i(TAG, "CI 0/3: cellInfo: " + cellInfo);
+
+        //String CI = gatherRadioData();
+        //Log.i(TAG, "CI 3/3: " + CI);
     }
 
     @Override
     public void onCellLocationChanged(CellLocation location) {
         super.onCellLocationChanged(location);
-        //String CL = getCellLocation(location);
+        //String CL = getCellLocation(location);    // [deprecated]
+        // NOTE: If there is only one radio in the device and that radio has an LTE connection, this method will return null
+        //       (or erroneous data).
         String message = "";
         if (location instanceof GsmCellLocation) {
             GsmCellLocation gcLoc = (GsmCellLocation) location;
@@ -334,270 +239,62 @@ public class RfApi extends PhoneStateListener {
     }
 
     @Override
-    public void onCallForwardingIndicatorChanged(boolean changed) {
-        super.onCallForwardingIndicatorChanged(changed);
-        String CFI = "n/a";
-        Log.i(TAG, "CFI: " + CFI);
+    public void onDataActivity(int direction) {
+        super.onDataActivity(direction);
+        String DA = getDataActivity(direction);
+        //if (!DA.equals("unknown")) {
+        Log.i(TAG, "DA: " + DA);
+        //}
     }
 
     @Override
-    public void onMessageWaitingIndicatorChanged(boolean changed) {
-        super.onMessageWaitingIndicatorChanged(changed);
-        String MWI = "n/a";
-        Log.i(TAG, "MWI: " + MWI);
+    public void onDataConnectionStateChanged(int state) {
+        super.onDataConnectionStateChanged(state);
+        String DC = getConnectionState(state);
+        //String message = "DataConnectionState: " + getConnectionState(state);
+        Log.i(TAG, "DC: " + DC);
+        //mTextView.setText(DC);
     }
 
-    //===================================================================================
-    //  More... ???
-    //===================================================================================
+    @Override
+    public void onMessageWaitingIndicatorChanged(boolean mwi) {
+        super.onMessageWaitingIndicatorChanged(mwi);
+        Log.i(TAG, "MWI: " + mwi);
+    }
 
-    // ToDo: probably remove, as this was just copy/paste from a different code
-    //       and only serve as a reference...
-    public String getCellularInfo(TelephonyManager telephonyManager) {
-        Log.v(TAG, "inside getCellularInfo");
-        String cellularInfo = "";
-        String log = "";
 
-        for (final CellInfo info : telephonyManager.getAllCellInfo()) {
-            if (info instanceof CellInfoGsm) {
-                log += "GSM@";
-                CellIdentityGsm gsm_cell = ((CellInfoGsm) info).getCellIdentity();
-                log += gsm_cell.getCid() + "#" + gsm_cell.getLac() + "#" + gsm_cell.getMcc() + "#" + gsm_cell.getMnc() + "_";
-
-                final CellSignalStrengthGsm gsm = ((CellInfoGsm) info).getCellSignalStrength();
-                log += gsm.getDbm() + "#" + gsm.getLevel();
-            }
-            else if (info instanceof CellInfoCdma) {
-                log += "CDMA@";
-                CellIdentityCdma cdma_cell = ((CellInfoCdma) info).getCellIdentity();
-                log += cdma_cell.getBasestationId() + "#" + cdma_cell.getNetworkId() + "#" + cdma_cell.getSystemId() + "#" + cdma_cell.getSystemId() + "_";
-
-                final CellSignalStrengthCdma cdma = ((CellInfoCdma) info).getCellSignalStrength();
-                log += cdma.getDbm() + "#" + cdma.getLevel();
-            }
-            else if (info instanceof CellInfoLte) {
-                log += "LTE@";
-                CellIdentityLte lte_cell = ((CellInfoLte) info).getCellIdentity();
-                log += lte_cell.getCi() + "#" + lte_cell.getPci() + "#" + lte_cell.getMcc() + "#" + lte_cell.getMnc() + "_";
-
-                final CellSignalStrengthLte lte = ((CellInfoLte) info).getCellSignalStrength();
-                log += lte.getDbm() + "#" + lte.getLevel();
-            }
-            else if (info instanceof CellInfoWcdma) {
-                log += "WCDMA@";
-                CellIdentityWcdma wcdma_cell = ((CellInfoWcdma) info).getCellIdentity();
-                log += wcdma_cell.getCid() + "#" + wcdma_cell.getLac() + "#" + wcdma_cell.getMcc() + "#" + wcdma_cell.getMnc() + "_";
-
-                final CellSignalStrengthWcdma wcdma = ((CellInfoWcdma) info).getCellSignalStrength();
-                log += wcdma.getDbm() + "#" + wcdma.getLevel();
-            } else {
-                Log.v(TAG, "Unknown Network Type");
-            }
+    @Override
+    public void onServiceStateChanged(ServiceState serviceState) {
+        super.onServiceStateChanged(serviceState);
+        String SS = getServiceState(serviceState.getState());
+        //String message ="";
+        //message += "SS: ==> " + serviceState + "\n";
+        //message += "onServiceStateChanged: getOperatorAlphaLong "   + serviceState.getOperatorAlphaLong() + "\n";
+        //message += "onServiceStateChanged: getOperatorAlphaShort "  + serviceState.getOperatorAlphaShort() + "\n";
+        //message += "onServiceStateChanged: getOperatorNumeric "     + serviceState.getOperatorNumeric() + "\n";
+        //message += "SS: ManualSelection: "  + serviceState.getIsManualSelection() + "\n";
+        //message += "SS: Roaming: "          + serviceState.getRoaming() + "\n";
+        //message += "SS: " + getServiceState(serviceState.getState());
+        Log.i(TAG, "SS: " + SS);
+        if (serviceState.getRoaming()) {
+            Log.i(TAG, "SS: Roaming! (" + serviceState.getOperatorNumeric() + ")" );
         }
-        cellularInfo = log;
-        return cellularInfo;
+        //mTextView.setText(SS);
     }
 
+    /*
+    @Override
+    public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+        super.onSignalStrengthsChanged(signalStrength);
+        //String SS = getSignalStrength(signalStrength.getState());
+        String SI = "not implemented";
+        Log.i(TAG, "SIG: " + SI);
+    }*/
 
-    /**
-     * Probably this need to be split into two parts:
-     *      1. getCellIdentity()        for use in:  DBi_bts
-     *      2. getCellSignalStrength    for use in:  DBi_measure
-     *
-     * @return
-     */
-    //private TelephonyManager mTM;
-    //public String gatherRadioData(TelephonyManager tm) {
-    public String gatherRadioData() {
+    /*
+    @Override
+    public void onVoLteServiceStateChanged(VoLteServiceState stateInfo) {
 
-        //mTM = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        //TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        //this.context = mycont;
-        //TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        //TelephonyManager tm = this.getSystemService(TELEPHONY_SERVICE); ; // = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        //TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        // LTE
-        int mcc = -1, mnc = -1, tac = -1,  ci = -1, pci = -1, ecn = -1;     // getCellIdentity()
-        int ta = -1, lev = -1, srp = -1, srq = -1, snr = -1, cqi = -1;      // getCellSignalStrength()
-        int dbm = Integer.MIN_VALUE;
-        int asu = Integer.MIN_VALUE;
-        // UMTS
-        int cid = -1, lac = -1, psc = -1, ucn = -1;
-        // GSM
-        int bss = -1, acn = -1;
-        // CDMA
-        // int
-
-        //-----------------------------------------------------------------------------------------
-        //  For getAllCellInfo():
-        //      (a) there are 4 objects:    [CellInfoGsm, CellInfoCdma, CellInfoLte, CellInfoWcdma]
-        //      (b) with 2 methods, each:   getCellIdentity(), getCellSignalStrength()
-        //
-        //  But:
-        //      Because LTE signal strengths are not yet available from API's below 26,
-        //      we have to manually extract the info that is actually there! [idiots]
-        //
-        //            String ltestr = signalStrength.toString();
-        //            String[] parts = temp.split(" ");
-        //
-        //            The parts[] array will then contain these elements:
-        //
-        //            parts[0] = "Signalstrength:"  _ignore this, it's just the title_
-        //            parts[1] = GsmSignalStrength
-        //            parts[2] = GsmBitErrorRate
-        //            parts[3] = CdmaDbm
-        //            parts[4] = CdmaEcio
-        //            parts[5] = EvdoDbm
-        //            parts[6] = EvdoEcio
-        //            parts[7] = EvdoSnr
-        //            parts[8] = LteSignalStrength
-        //         *  parts[9] = LteRsrp
-        //         *  parts[10] = LteRsrq
-        //         *  parts[11] = LteRssnr
-        //         *  parts[12] = LteCqi
-        //            parts[13] = gsm|lte
-        //            parts[14] = TA?
-        //
-        //  References:
-        //
-        //  [1] https://sites.google.com/site/androiddevelopmentproject/home/rf-signal-tracker/a-very-basic-how-to
-        //  [2] https://github.com/demantz/WearNetworkNotifications/blob/master/common/src/main/java/com/mantz_it/common/ConnectionData.java
-        //  [3] https://github.com/parksjg/SignalStrength/tree/master
-        //
-        //-----------------------------------------------------------------------------------------
-        if(tm.getAllCellInfo() != null && !tm.getAllCellInfo().isEmpty()) {
-            CellInfo info = tm.getAllCellInfo().get(0); // Todo: What's in get(0) exactly?
-
-            if (info instanceof CellInfoLte) {
-                // "d" for details...
-                //CellInfoLte d = (CellInfoLte) info;
-                CellIdentityLte         dci = ((CellInfoLte) info).getCellIdentity();
-                CellSignalStrengthLte   dss = ((CellInfoLte) info).getCellSignalStrength();
-
-                // All these get: Integer.MAX_VALUE if unknown
-                // d.getCellIdentity() --> dci
-                mcc = dci.getMcc();                 // Mobile Country Code:                 [0..999]
-                mnc = dci.getMnc();                 // Mobile Network Code:                 [0..999]
-                tac = dci.getTac();                 // 16-bit Tracking Area Code:           [?..]
-                 ci = dci.getCi();                  // 28-bit Cell Identity:                [?..0xffffff]
-                pci = dci.getPci();                 // Physical Cell Id:                    [0..503]
-                //ecn = dci.getEarfcn();            // 18-bit Absolute RF Channel Number:   [?..65535]?      !! API 24
-
-                // d.getCellSignalStrength() --> dss
-                 ta = dss.getTimingAdvance();       // LTE Timing Advance:                  [0..63.]
-                asu = dss.getAsuLevel();            // Signal level as ASU value            [0..97], 99 is unknown (based on RSRP)
-                dbm = dss.getDbm();                 // Signal Strength                      [dBm]
-                //lev = dss.getLevel();             // signal level as an int from          [0..4]          !! Useless !
-
-                if (Build.VERSION.SDK_INT >= 26 ) { // Build.VERSION_CODES.O
-/*
-                    srp = dss.getRsrp();            // Reference Signal Received Power                      !! API 26
-                    srq = dss.getRsrq();            // Reference Signal Received Quality                    !! API 26
-                    snr = dss.getRssnr();           // Reference Signal Signal-to-Noise Ratio               !! API 26
-                    cqi = dss.getCqi();             // Channel Quality Indicator                            !! API 26
-*/
-                } else {
-                    String tmp = dss.toString();
-                    String[] parts = tmp.split(" ");
-                    if (parts.length >= 13) {               // check that we have all parts!
-                        srp = Integer.valueOf(parts[9]);
-                        srq = Integer.valueOf(parts[10]);
-                        snr = Integer.valueOf(parts[11]);
-                        cqi = Integer.valueOf(parts[12]);
-                    } else {
-                        Log.w(TAG, "Missing parts in the LTE signal strengths bundle. (parts=" + parts.length + ") \nparts: " + tmp);
-                    }
-                }
-                Log.i(TAG, "LTE info 1/3: " + "MCC:" + mcc + ", MNC:" + mnc + ", TAC:" + tac + ", CI:" + ci + ", PCI:" + pci);
-                Log.i(TAG, "LTE info 2/3: " + "TA:" + ta + ", ASU:" + asu + ", dBm:" + dbm);
-                Log.i(TAG, "LTE info 3/3: " + "RSRP:" + srp + ", RSRQ:" + srq + ", RSSNR:" + snr + ", CQI:" + cqi);
-
-            } else if (info instanceof CellInfoWcdma) {
-                CellIdentityWcdma         dci = ((CellInfoWcdma) info).getCellIdentity();
-                CellSignalStrengthWcdma   dss = ((CellInfoWcdma) info).getCellSignalStrength();
-
-                // CellIdentity
-                mcc = dci.getMcc();
-                mnc = dci.getMnc();
-                cid = dci.getCid();                 // 28-bit UMTS Cell Identity                [0..268435455] / [0..0xffffff]?
-                lac = dci.getLac();                 // 16-bit Location Area Code:               [0..65535]
-                psc = dci.getPsc();                 // 9-bit UMTS Primary Scrambling Code:      [0..511]
-                //ucn = dci.getUarfcn();            // 16-bit UMTS Absolute RF Channel Number:  [?..65535?]?      !! API 24
-
-                // CellSignalStrength
-                asu = dss.getAsuLevel();
-                dbm = dss.getDbm();
-                //lev = dss.getLevel();             // Useless!
-
-                Log.i(TAG, "UMTS info 1/2: " + "MCC:" + mcc + ", MNC:" + mnc + ", LAC:" + lac + ", CID:" + cid + ", PSC:" + psc);
-                Log.i(TAG, "UMTS info 2/2: " +"ASU:" + asu + ", dBm:" + dbm);
-
-            } else if (info instanceof CellInfoGsm) {
-                CellIdentityGsm         dci = ((CellInfoGsm) info).getCellIdentity();
-                CellSignalStrengthGsm   dss = ((CellInfoGsm) info).getCellSignalStrength();
-
-                // CellIdentity
-                mcc = dci.getMcc();
-                mnc = dci.getMnc();
-                cid = dci.getCid();                 // 28-bit Cell Identity:                    [?..0xffffff]
-                lac = dci.getLac();                 // 16-bit Location Area Code:               [0..65535]
-                //bss = dci.getBsic();              // 6-bit Base Station Identity Code:        [0..63]          !! API 24
-                //acn = dci.getArfcn();             // 18-bit Absolute RF Channel Number:       [?..65535]?      !! API 24
-
-                // CellSignalStrength
-                //ta = dss.getTimingAdvance();      // GSM Timing Advance: (0..219 symbols)     [0..63]          !! API 24
-                asu = dss.getAsuLevel();            // signal level as ASU value:               [0..31]
-                dbm = dss.getDbm();
-
-                Log.i(TAG, "GSM info 1/2: " + "MCC:" + mcc + ", MNC:" + mnc + ", LAC:" + lac + ", CID:" + cid);
-                Log.i(TAG, "GSM info 2/2: " +"ASU:" + asu + ", dBm:" + dbm);
-
-            } else if (info instanceof CellInfoCdma) {
-                CellInfoCdma d = (CellInfoCdma) info;
-                dbm = d.getCellSignalStrength().getDbm();
-                asu = d.getCellSignalStrength().getAsuLevel();
-
-                CellIdentityCdma         dci = ((CellInfoCdma) info).getCellIdentity();
-                CellSignalStrengthCdma   dss = ((CellInfoCdma) info).getCellSignalStrength();
-
-                // todo: ...
-                /*
-                // CellIdentity
-                bbid = getBasestationId()
-                blat = getLatitude()
-                blon = getLongitude()
-                bnid = getNetworkId()
-                bsid = getSystemId()
-
-                // CellSignalStrength
-                getAsuLevel()   // Get the signal level as an asu value between 0..97, 99 is unknown
-                getCdmaDbm()    // Get the CDMA RSSI value in dBm
-                getCdmaEcio()   // Get the CDMA Ec/Io value in dB*10
-                getCdmaLevel()  // Get cdma as level 0..4
-                getDbm()        // Get the signal strength as dBm
-                getEvdoDbm()    // Get the EVDO RSSI value in dBm
-                getEvdoEcio()   // Get the EVDO Ec/Io value in dB*10
-                getEvdoLevel()  // Get Evdo as level 0..4
-                getEvdoSnr()    // Get the signal to noise ratio.
-                getLevel()      // Get signal level as an int from 0..4
-                */
-
-                //Log.i(TAG, "CDMA info 1/3: " + "MCC:" + mcc + ", MNC:" + mnc + ", TAC:" + tac + ", CI:" + ci + ", PCI:" + pci);
-                //Log.i(TAG, "CDMA info 2/3: " + "TA:" + ta + ", ASU:" + asu + ", dBm:" + dbm);
-                //Log.i(TAG, "CDMA info 3/3: " + "RSRP:" + srp + ", RSRQ:" + srq + ", RSSNR:" + snr + ", CQI:" + cqi);
-            }
-        } else {
-            Log.w(TAG, mTAG + "getAllCellInfo() returned NULL or an empty list!");
-            return "fail";
-        }
-
-        // also add a timestamp:
-        //data.putLong(TIMESTAMP, System.currentTimeMillis());
-
-        return "ok";
-    }
+    }*/
 
 }
